@@ -6,15 +6,22 @@ class window.Hand extends Backbone.Collection
 
 
   hit: ->
-    @add(@deck.pop())
-    @last()
+    if [@minScore(), @minScore() + 10 * @hasAce()][0] < 21
+      @add(@deck.pop())
+      @last()
+    else
+      @trigger 'busted'
 
+    
   stand: ->
     @at(0).flip()
     while ([@minScore(), @minScore() + 10 * @hasAce()][0] < 17)
       @add(@deck.pop())
       @last()
     dealerScore = [@minScore(), @minScore() + 10 * @hasAce()][0]
+
+  bust: ->
+    console.log("")
 
 
 
