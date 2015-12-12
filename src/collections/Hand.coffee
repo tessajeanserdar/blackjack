@@ -14,6 +14,8 @@ class window.Hand extends Backbone.Collection
     while ([@minScore(), @minScore() + 10 * @hasAce()][0] < 17)
       @add(@deck.pop())
       @last()
+    dealerScore = [@minScore(), @minScore() + 10 * @hasAce()][0]
+
 
 
   hasAce: -> @reduce (memo, card) ->
