@@ -4,23 +4,34 @@ class window.Hand extends Backbone.Collection
   initialize: (array, @deck, @isDealer) ->
   # new Hand [@pop().flip(), @pop()], @, true
 
+  playerScore = []
 
   hit: ->
     @add(@deck.pop())
     @last()
-    console.log(@scores()[0])
+    playerScore.push @scores()[0]
     if @scores()[0] > 21 
       @trigger('busted',this)
       @trigger('reset', this)
 
     
   stand: ->
+    console.log(playerScore)
     @at(0).flip()
     while ([@minScore(), @minScore() + 10 * @hasAce()][0] < 17)
       @add(@deck.pop())
       @last()
-    dealerScore = [@minScore(), @minScore() + 10 * @hasAce()][0]
-
+    if @scores()[0] > 21 
+      @trigger('busted', this)
+      @trigger('reset', this)
+    else if @scores()[0] > playerScore[playerScore.length - 1]
+      alert("Dealer Wins")
+      @trigger('reset', this)
+    else
+      alert("Player wins")
+      @trigger('reset', this)
+    
+    
 
   hasAce: -> @reduce (memo, card) ->
     memo or card.get('value') is 1

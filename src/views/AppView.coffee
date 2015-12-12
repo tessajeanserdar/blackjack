@@ -11,16 +11,22 @@ class window.AppView extends Backbone.View
     'click .stand-button': -> @model.get('dealerHand').stand()
     
   comparescores: ->
-    if @model.get('playerHand').scores()[0] >=21
-      @model.get('playerHand').bust()
-      @get('playerHand').reset()
-      alert("player score #{@model.get('playerHand').scores()[0]}  dealer score#{@model.get('dealerHand').scores()[0]}")
+    if @model.get('playerHand').scores()[0] > @model.get('dealerHand').scores()[0]
+      alert("Dealer Wins")
+    else
+      alert("Player Wins")
     
 
   initialize: ->
     @comparescores
     @render()
     @model.get('playerHand').on('reset', =>
+      @$el.children().detach()
+      @$el.html @template()
+      @$('.player-hand-container').html new HandView(collection: @model.get 'playerHand').el
+      @$('.dealer-hand-container').html new HandView(collection: @model.get 'dealerHand').el
+    )
+    @model.get('dealerHand').on('reset', =>
       @$el.children().detach()
       @$el.html @template()
       @$('.player-hand-container').html new HandView(collection: @model.get 'playerHand').el
