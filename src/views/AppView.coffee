@@ -13,14 +13,19 @@ class window.AppView extends Backbone.View
   comparescores: ->
     if @model.get('playerHand').scores()[0] >=21
       @model.get('playerHand').bust()
+      @get('playerHand').reset()
       alert("player score #{@model.get('playerHand').scores()[0]}  dealer score#{@model.get('dealerHand').scores()[0]}")
     
 
   initialize: ->
     @comparescores
     @render()
-    @model.on('busted', )
-
+    @model.get('playerHand').on('reset', =>
+      @$el.children().detach()
+      @$el.html @template()
+      @$('.player-hand-container').html new HandView(collection: @model.get 'playerHand').el
+      @$('.dealer-hand-container').html new HandView(collection: @model.get 'dealerHand').el
+    )
 
   render: ->
     @$el.children().detach()

@@ -6,11 +6,12 @@ class window.Hand extends Backbone.Collection
 
 
   hit: ->
-    if [@minScore(), @minScore() + 10 * @hasAce()][0] < 21
-      @add(@deck.pop())
-      @last()
-    else
-      @trigger 'busted'
+    @add(@deck.pop())
+    @last()
+    console.log(@scores()[0])
+    if @scores()[0] > 21 
+      @trigger('busted',this)
+      @trigger('reset', this)
 
     
   stand: ->
@@ -19,10 +20,6 @@ class window.Hand extends Backbone.Collection
       @add(@deck.pop())
       @last()
     dealerScore = [@minScore(), @minScore() + 10 * @hasAce()][0]
-
-  bust: ->
-    console.log("")
-
 
 
   hasAce: -> @reduce (memo, card) ->
